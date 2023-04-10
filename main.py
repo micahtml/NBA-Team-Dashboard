@@ -18,8 +18,7 @@ soup = BeautifulSoup(response.content, 'html.parser')
 table = soup.find('table', {'id': 'per_game'})
 
 # extract the relevant columns from the table
-columns = ['Player', 'Pos', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', '2P', '2PA',
-           '2P%', 'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
+columns = ['Player', 'Pos', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', '2P', '2PA','2P%', 'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
 rows = []
 for tr in table.find_all('tr')[1:]:
     row = [td.get_text() for td in tr.find_all('td')]
