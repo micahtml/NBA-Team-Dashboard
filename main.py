@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import os
 
 # specify the URL
-url = 'https://www.basketball-reference.com/teams/LAL/2022.html'
+url = 'https://www.basketball-reference.com/teams/LAL/2023.html'
 
 # send a GET request to the URL
 response = requests.get(url)
