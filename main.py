@@ -51,5 +51,8 @@ df['TOV'] = pd.to_numeric(df['TOV'])
 df['PF'] = pd.to_numeric(df['PF'])
 df['PTS'] = pd.to_numeric(df['PTS'])
 
+# remove the 'Pos' column
+df.drop(columns=['Pos'], inplace=True)
+
 # display the cleaned data
 print(df)
