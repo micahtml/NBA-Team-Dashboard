@@ -1,9 +1,12 @@
+from tkinter import filedialog
+import tkinter as tk
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+import os
 
 # specify the URL
-url = 'https://www.basketball-reference.com/teams/LAL/2023.html'
+url = 'https://www.basketball-reference.com/teams/LAL/2022.html'
 
 # send a GET request to the URL
 response = requests.get(url)
@@ -15,7 +18,8 @@ soup = BeautifulSoup(response.content, 'html.parser')
 table = soup.find('table', {'id': 'per_game'})
 
 # extract the relevant columns from the table
-columns = ['Player', 'Pos', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', '2P', '2PA', '2P%', 'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
+columns = ['Player', 'Pos', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', '2P', '2PA',
+           '2P%', 'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
 rows = []
 for tr in table.find_all('tr')[1:]:
     row = [td.get_text() for td in tr.find_all('td')]
@@ -54,5 +58,18 @@ df['PTS'] = pd.to_numeric(df['PTS'])
 # remove the 'Pos' column
 df.drop(columns=['Pos'], inplace=True)
 
-# display the cleaned data
 print(df)
+
+# get the current working directory
+cwd = os.getcwd()
+
+# create a tkinter root window
+root = tk.Tk()
+root.withdraw()
+
+# open a save dialog window to choose where to save the file
+file_path = filedialog.asksaveasfilename(defaultextension='.xlsx', initialdir=cwd, title='Save Excel file', filetypes=(
+    ('Excel files', '*.xlsx'), ('All files', '*.*')))
+
+# export the cleaned data to an Excel file
+df.to_excel(file_path, index=False)
