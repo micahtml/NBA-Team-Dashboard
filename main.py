@@ -1,25 +1,56 @@
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-# Define the URL to scrape
-url = "https://www.basketball-reference.com/teams/LAL/"
+# specify the URL
+url = 'https://www.basketball-reference.com/teams/LAL/2023.html'
 
-# Send a GET request to the URL
+# send a GET request to the URL
 response = requests.get(url)
 
-# Parse the HTML content of the response using BeautifulSoup
-soup = BeautifulSoup(response.content, "html.parser")
+# parse the HTML content of the page using BeautifulSoup
+soup = BeautifulSoup(response.content, 'html.parser')
 
-# Find the table with the team performance data
-team_table = soup.find("table", {"id": "team_and_opponent"})
+# find the table containing player stats
+table = soup.find('table', {'id': 'per_game'})
 
-# Extract the team performance data from the table
-team_data = []
-for row in team_table.tbody.find_all("tr"):
-    row_data = []
-    for cell in row.find_all(["th", "td"]):
-        row_data.append(cell.text)
-    team_data.append(row_data)
+# extract the relevant columns from the table
+columns = ['Player', 'Pos', 'G', 'GS', 'MP', 'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', '2P', '2PA',
+           '2P%', 'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'PF', 'PTS']
+rows = []
+for tr in table.find_all('tr')[1:]:
+    row = [td.get_text() for td in tr.find_all('td')]
+    rows.append(row)
 
-# Print the team performance data
-print(team_data)
+# create a pandas DataFrame from the rows and columns
+df = pd.DataFrame(rows, columns=columns)
+
+# clean the data by converting columns to numeric types
+df['G'] = pd.to_numeric(df['G'])
+df['GS'] = pd.to_numeric(df['GS'])
+df['MP'] = pd.to_numeric(df['MP'])
+df['FG'] = pd.to_numeric(df['FG'])
+df['FGA'] = pd.to_numeric(df['FGA'])
+df['FG%'] = pd.to_numeric(df['FG%'])
+df['3P'] = pd.to_numeric(df['3P'])
+df['3PA'] = pd.to_numeric(df['3PA'])
+df['3P%'] = pd.to_numeric(df['3P%'])
+df['2P'] = pd.to_numeric(df['2P'])
+df['2PA'] = pd.to_numeric(df['2PA'])
+df['2P%'] = pd.to_numeric(df['2P%'])
+df['eFG%'] = pd.to_numeric(df['eFG%'])
+df['FT'] = pd.to_numeric(df['FT'])
+df['FTA'] = pd.to_numeric(df['FTA'])
+df['FT%'] = pd.to_numeric(df['FT%'])
+df['ORB'] = pd.to_numeric(df['ORB'])
+df['DRB'] = pd.to_numeric(df['DRB'])
+df['TRB'] = pd.to_numeric(df['TRB'])
+df['AST'] = pd.to_numeric(df['AST'])
+df['STL'] = pd.to_numeric(df['STL'])
+df['BLK'] = pd.to_numeric(df['BLK'])
+df['TOV'] = pd.to_numeric(df['TOV'])
+df['PF'] = pd.to_numeric(df['PF'])
+df['PTS'] = pd.to_numeric(df['PTS'])
+
+# display the cleaned data
+print(df.head())
