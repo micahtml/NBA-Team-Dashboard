@@ -32,9 +32,5 @@ To use the Los Angeles Lakers Performance Dashboard, follow these steps:
 
 ## Credits
 
-- The Los Angeles Lakers Performance Dashboard is developed by [Your Name].
-
-## License
-
-This project is licensed under the [License Name] - see the [LICENSE](LICENSE) file for details.
+- The Los Angeles Lakers Performance Dashboard is developed by Micah Thornton
 
